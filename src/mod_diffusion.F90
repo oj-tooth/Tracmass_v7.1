@@ -23,7 +23,7 @@ MODULE mod_diffusion
 
   CONTAINS
 
-      SUBROUTINE mlreshuffle(z1,ib,jb,kb,dt,ml_depth)
+      SUBROUTINE mlreshuffle(z1,ib,jb,kb,dt,ml_depth,ml_wmax)
     ! --------------------------------------------------
     !
     ! Purpose:
@@ -71,8 +71,6 @@ MODULE mod_diffusion
 
       ! Evaluate if particle is located within the mixed layer.
       IF (tmpDepth <= ml_depth) THEN
-         ! Declare maximum vertical velocity of convective mixing in ms-1.
-         ml_wmax = 0.1
          ! Compute maximum depth change
          maxdepthchange = ml_wmax * dt
 
