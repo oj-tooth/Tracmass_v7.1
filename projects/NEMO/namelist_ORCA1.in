@@ -158,6 +158,10 @@
 &INIT_TRACERS
       l_tracers = .TRUE.               ! Should we evaluate tracers along the trajectories?
 
+      ! Define killzone file name stored in physDataDir
+      ! with killzone mask variable named 'killzone'
+      killzoneFile = 'killzone.nc'
+
       ! Tracer name (description)
       tracername = 'To','S','sigma0'
       ! Tracer unit (description)
@@ -211,6 +215,19 @@
       !maxormin     =  1, -1
       ! This set up defines a killing zone by the 25C isotherm (maximum)
       ! and the 35psu isohaline (minimum)
+
+      ! If exitType = 2 & 'killzone' tracer active: killing zone defined by 
+      ! user defined mask read as tracer along particle trajectories.
+      ! 2D mask should define cells in domain = 1 and outside = 0.
+      ! Tracerchoice should be defined as 'killzone' tracer variable
+      ! tracerchoice = 3,
+      ! tracere      = 0.5,
+      ! maxormin     =  1,
+      ! This set up defines a killing zone where particles crossing cell
+      ! wall into a region outside of mask domain will be terminated.
+      ! tracere = 0.5 ensures that when one of two neghbouring T points
+      ! equals 0 (outside of domain) the resulting average tracer value 
+      ! (0.5) results in particle termination.
 
 /
 
