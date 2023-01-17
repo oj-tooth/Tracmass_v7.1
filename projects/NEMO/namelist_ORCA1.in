@@ -126,11 +126,7 @@
      							! = 3 Each particle reflects air/water mass/volume at seeding.
      							!     set by partQuant in m3 or kg per particle
 
-<<<<<<< HEAD
       nsdtraj        = 10,         ! number of trajectories to allocate per seeding cell (used for allocation if nqua > 1)
-=======
-      nsdtraj        = 10,         ! max number of trajectories expected to seed per seeding cell - used for array allocation
->>>>>>> 32614e9 (Updated namelist example to include l_compress and l_multifile usage)
       partquant      = 1,          ! particles/gridcell or m3s-1/particle or m3/particle
       loneparticle   = 0, 	     ! start only one trajectory for debugging
       seedtype       = 1,	     ! = 1 seed using ist,jst,kst (below)
@@ -245,6 +241,11 @@
       Ah = 0                        ! Horizontal diffusivity coefficient
       Av = 0                        ! Vertical diffusivity coefficient
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+      l_mlreshuffle = .TRUE.        ! Apply Mixed Layer Reshuffle - particle vertical displacement in ML - from Paris et al. 2013
+      ml_wmax = 0.1                 ! Maximum vertical velocity of convective mixing (m/s)
+>>>>>>> 0b64a56 (Added nameist vars to implement mlreshuffle scheme)
 =======
       l_mlreshuffle = .TRUE.        ! Apply Mixed Layer Reshuffle - particle vertical displacement in ML - from Paris et al. 2013
       ml_wmax = 0.1                 ! Maximum vertical velocity of convective mixing (m/s)
