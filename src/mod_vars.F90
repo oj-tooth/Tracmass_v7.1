@@ -378,7 +378,7 @@ MODULE mod_tracervars
 
   ! Tracer characteristics
   CHARACTER(len=100), DIMENSION(10)   :: tracername = '', tracerunit, &
-                                         tracervarname,traceraction
+                                         tracervarname, traceraction, killzoneFile
 
   CHARACTER(len=2), DIMENSION(10)     :: tracerdimension = '3D'
 
