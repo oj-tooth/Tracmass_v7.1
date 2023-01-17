@@ -214,7 +214,7 @@ MODULE mod_grid
   REAL(DP), ALLOCATABLE, DIMENSION(:,:,:)     :: zstot
   REAL(DP), ALLOCATABLE, DIMENSION(:,:)       :: depth
   REAL(DP), ALLOCATABLE, DIMENSION(:)         :: aa, bb
-
+  REAL(DP), ALLOCATABLE, DIMENSION(:)         :: mdl_depth
   INTEGER, ALLOCATABLE, DIMENSION(:,:)        :: kmt, kmu, kmv
 
 
@@ -228,7 +228,7 @@ MODULE mod_grid
                                                w_name = ''
 
   CHARACTER(LEN=50)                         :: hgridFile, dy_name, dyu_name, dx_name, dxv_name, &
-                                               zgridFile, dzt_name, dzu_name, dzv_name, dep_name, &
+                                               zgridFile, dzt_name, dzu_name, dzv_name, depth_name, &
                                                bathyFile, kmt_name
 
   CHARACTER(LEN=200)                        :: physDataDir, physPrefixForm,  &
@@ -479,10 +479,12 @@ MODULE mod_activevars
 
   USE mod_precdef
 
-  ! Diffussion
+  ! Diffussion & Mixed Layer Reshuffle.
   LOGICAL    ::  l_diffusion = .FALSE.
+  LOGICAL    ::  l_mlreshuffle = .FALSE.
   REAL(DP)   ::  Ah = 0.d0  ! Diffusion param (horizontal)
   REAL(DP)   ::  Av = 0.d0  ! -----//-------- (vertical)
+  REAL(DP)   ::  ml_wmax = 0.d0  ! Maximum vertical velocity for convective mixing.
 
 END MODULE mod_activevars
 
