@@ -44,6 +44,7 @@
       dzt_name    = 'e3t'                               ! name of 3D dz at T point
       dzu_name    = 'e3u'                               ! --- " ---  dz at U point
       dzv_name    = 'e3v'                               ! --- " ---  dz at V point
+      depth_name  = 'nav_lev'                           ! --- " ---- depth (m) at T point.
 
       bathyFile      = 'bathy_level.nc'                 ! file with bathymetry in model levels
       kmt_name       = 'Bathy_level'                    ! name of bathymetry in model levels
@@ -222,4 +223,9 @@
       l_diffusion = .FALSE.         ! Apply Stochastic diffusion along particle trajectories
       Ah = 0                        ! Horizontal diffusivity coefficient
       Av = 0                        ! Vertical diffusivity coefficient
+<<<<<<< HEAD
+=======
+      l_mlreshuffle = .TRUE.        ! Apply Mixed Layer Reshuffle - particle vertical displacement in ML - from Paris et al. 2013
+      ml_wmax = 0.1                 ! Maximum vertical velocity of convective mixing (m/s)
+>>>>>>> 0b64a56 (Added nameist vars to implement mlreshuffle scheme)
 /
