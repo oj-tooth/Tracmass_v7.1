@@ -47,8 +47,8 @@ MODULE mod_init
           namelist /INIT_GRID_SIZE/        imt, jmt, km, iperio, jperio, &
                                            topoDataDir, &
                                            hgridFile, dy_name, dyu_name, dx_name, dxv_name, &
-                                           zgridFile, dzt_name, dzu_name, dzv_name, dep_name,&
-                                           bathyFile, kmt_name
+                                           zgridFile, dzt_name, dzu_name, dzv_name, depth_name,&
+                                           bathyFile, kmt_name &
           namelist /INIT_GRID_SUBDOMAIN/   l_subdom, imindom, imaxdom, jmindom, jmaxdom
           namelist /INIT_GRID_TIME/        ngcm_step, ngcm_unit, iter
           namelist /INIT_START_DATE/       startSec, startMin, startHour,           &
@@ -71,7 +71,7 @@ MODULE mod_init
                                            tracerchoice, tracere, maxormin
           namelist /INIT_POSTPROCESS/      l_psi, l_offline, dirpsi, xyflux, &
                                            l_divergence, divconst
-          namelist /INIT_ACTIVE/           l_diffusion, ah, av
+          namelist /INIT_ACTIVE/           l_diffusion, ah, av, l_mlreshuffle, ml_wmax
 
           ! Read namelist
           OPEN (8,file='namelist.in',    &
