@@ -37,7 +37,7 @@ SUBROUTINE read_field
    INTEGER        :: kk, itrac
 
    REAL(DP), ALLOCATABLE, DIMENSION(:,:,:)  :: tmp3d
-   CHARACTER (len=200)                      :: fieldFile, dateprefix
+   CHARACTER (len=200)                      :: fieldFile, killzoneFile, dateprefix
 
    ! Reassign the time index of uflux and vflux, dzt, dzdt, hs, ...
    CALL swap_time()
@@ -156,12 +156,20 @@ SUBROUTINE read_field
 
             ! Read the tracer from a netcdf file
             fieldFile = TRIM(physDataDir)//TRIM(physPrefixForm)//TRIM(dateprefix)//TRIM(tGridName)//TRIM(fileSuffix)
+            ! Read the killzone mask from a netcdf file
+            killzoneFile = TRIM(physDataDir)//TRIM(physPrefixForm)
             IF (tracers(itrac)%dimension == '3D') THEN
                 tmp3d(1:imt,1:jmt,km:1:-1) = get3DfieldNC(fieldFile, tracers(itrac)%varname,[imindom,jmindom,1,nctstep] &
                           ,[imt,jmt,km,1],'st')
             ELSE IF (tracers(itrac)%dimension == '2D') THEN
-                tmp3d(1:imt,1:jmt,1) = get2DfieldNC(fieldFile, tracers(itrac)%varname,[imindom,jmindom,nctstep,1] &
-                                        ,[imt,jmt,1,1],'st')
+                ! For the killzone mask case:
+                IF (tracers(itrac)%varname == 'killzone')
+                    tmp3d(1:imt,1:jmt,1) = get2DfieldNC(killzoneFile, tracers(itrac)%varname,[imindom,jmindom,1,1] &
+                            ,[imt,jmt,1,1],'st')
+                ELSE
+                ! For all other 2D tracer fields.
+                    tmp3d(1:imt,1:jmt,1) = get2DfieldNC(fieldFile, tracers(itrac)%varname,[imindom,jmindom,nctstep,1] &
+                            ,[imt,jmt,1,1],'st')
             END IF
 
         ELSE IF (tracers(itrac)%action == 'compute') THEN
