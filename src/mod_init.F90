@@ -65,7 +65,7 @@ MODULE mod_init
                                            tracername, tracershift, tracerscale, &
                                            tracerunit, tracervarname, &
                                            traceraction,tracermin, tracermax, &
-                                           tracerdimension
+                                           tracerdimension, killzoneFile
           namelist /INIT_TRACERS_SEEDING/  tracer0min, tracer0max
           namelist /INIT_KILLZONES/        timax, l_nosurface, exitType, ienw, iene, jens, jenn, &
                                            tracerchoice, tracere, maxormin
