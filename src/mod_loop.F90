@@ -223,7 +223,18 @@ MODULE mod_loop
             IF (l_tracers) THEN
 
               ! Update the value of the tracer
-              CALL update_tracer(ntrac,ia,ja,ka, ib,jb,kb,x1,y1,z1)
+              CALL update_tracer(ntrac,ia,ja,ka,ib,jb,kb,x1,y1,z1)
+
+              ! Implement mixed layer reshuffle scheme.
+              ! Note: tracerval(4) argument should be the mixed layer depth in meters.
+              IF (l_mlreshuffle) THEN
+                 ! Randomly reshuffle particles in the surface mixed layer.
+                 CALL mlreshuffle(z1,ib,jb,kb,dt,trajectories(ntrac)%tracerval(4),ml_wmax)
+
+                 ! Update the value of the tracer following reshuffle.
+                 CALL update_tracer(ntrac,ia,ja,ka,ib,jb,kb,x1,y1,z1)
+
+              END IF
 
               ! If streamfunctions are computed
               IF ((l_psi) .AND. (scrivi .EQV. .FALSE.) .AND. (l_offline .EQV. .FALSE.)) THEN
