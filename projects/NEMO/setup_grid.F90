@@ -101,4 +101,7 @@ SUBROUTINE setup_grid
       END WHERE
     END DO
 
+    ! Allocate depths at T points
+    mdl_depth = get1DfieldNC(TRIM(topoDataDir)//TRIM(zgridFile), depth_name, km, km)
+
 END SUBROUTINE setup_grid
