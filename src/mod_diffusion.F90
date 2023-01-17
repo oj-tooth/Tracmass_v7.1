@@ -23,6 +23,145 @@ MODULE mod_diffusion
 
   CONTAINS
 
+      SUBROUTINE mlreshuffle(z1,ib,jb,kb,dt,ml_depth)
+    ! --------------------------------------------------
+    !
+    ! Purpose:
+    ! Reshuffle particles within the surface mixed layer
+    ! using a maximum vertical velocity method.
+    !
+    ! Adapted from CMS tool - see Paris et al., 2013.
+    !
+    ! ---------------------------------------------------
+
+      REAL(DP) :: z1                ! Position of trajectory
+      REAL(DP) :: zd                ! Position of random depth in ML
+      REAL(DP) :: tmpZ              ! Temporary position of trajectory
+      REAL(DP) :: tmpDepth          ! Temporary depth in m.
+
+      REAL(DP) :: ml_depth          ! Mixed layer depth in m.
+      REAL(DP) :: ml_wmax           ! Maximum vertical velocity in ms-1.
+      REAL(DP) :: maxdepthchange, mindepth, maxdepth ! Reshuffle depths in m.
+
+      REAL(DP) :: randomdepth       ! Depth in m resulting from random displacement.
+      REAL(DP) :: frac         ! Interpolation coefficient.
+
+      REAL(DP) :: dt                ! Time-step
+
+      INTEGER  :: ind               ! Interpolation index.
+      INTEGER  :: ib,jb,kb          ! Indexes
+      INTEGER  :: tmpk              ! Temporary indexes
+
+      ! Declare tmp positions.
+      tmpZ = z1
+
+      ! Declare tmp index referenced to original model grid.
+      tmpk = (KM - kb) + 1
+
+      ! Linear interpolation of particle depth in meters from vertical position.
+      tmpDepth = mdl_depth(tmpk) + (mdl_depth(tmpk+1) - mdl_depth(tmpk))*(kb - z1)
+
+      ! -----------------------------------------
+      ! Print particle and ml depths.
+      ! PRINT *,'* ---------------------------- *'
+      ! PRINT *,'* Original Depth =', tmpDepth
+      ! PRINT *,'* Depth Level =', tmpZ
+      ! PRINT *,'* ML Depth = ', ml_depth
+      ! -----------------------------------------
+
+      ! Evaluate if particle is located within the mixed layer.
+      IF (tmpDepth <= ml_depth) THEN
+         ! Declare maximum vertical velocity of convective mixing in ms-1.
+         ml_wmax = 0.1
+         ! Compute maximum depth change
+         maxdepthchange = ml_wmax * dt
+
+         ! Determine minimum depth in meters the particle could reach.
+         mindepth = tmpDepth - maxdepthchange
+         ! Prevent particles from reaching the sea surface.
+         IF (mindepth < 0) THEN
+            mindepth = 0
+         END IF
+
+         ! Determine maximum depth in meters the particle could reach.
+         maxdepth = tmpDepth + maxdepthchange
+
+         ! Prevent particles from exiting the mixed layer.
+         IF (maxdepth > ml_depth) THEN
+            maxdepth = ml_depth
+         END IF
+
+         ! Prevent particles from reaching sea floor.
+         IF (maxdepth > mdl_depth(kmt(ib,jb))) THEN
+            maxdepth =  mdl_depth(kmt(ib,jb)) - 0.5
+         END IF
+
+         ! Randomly assign the particle a vertical position between
+         ! the minimum and maximum depths in meters.
+         randomdepth = ((maxdepth - mindepth)*RAND()) + mindepth
+
+         ! ---------------------------------------------------
+         ! Print reshuffled depth.
+         ! PRINT *,'* Max Depth Change = ', maxdepthchange
+         ! PRINT *,'* New Depth = ', randomdepth
+         ! PRINT *,'* Depth Change = ', randomdepth - tmpDepth
+         ! ----------------------------------------------------
+
+        ! -----------------------------------------------------
+         ! Convert random depth from meters to model coordinates
+         ! Where particle is found in upper most z-level:
+         IF (randomdepth < mdl_depth(1)) THEN
+            ind = 1
+            frac = randomdepth / mdl_depth(ind)
+            zd = frac
+
+         ! Iterate across model depth levels to determine z-level.
+         ELSE
+            DO ind = 1, KM-1
+               IF ((randomdepth >= mdl_depth(ind)) .AND. (randomdepth < mdl_depth(ind+1))) THEN
+                  frac = (randomdepth - mdl_depth(ind)) / (mdl_depth(ind+1) - mdl_depth(ind))
+                  zd = ind + frac
+               END IF
+            END DO
+         END IF
+
+         ! -----------------------------------------------------
+         ! Update vertical position temporarily
+         tmpZ = (KM - zd + 1)
+
+         ! Update box number temporarily
+         tmpk = INT(tmpZ) + 1
+
+         ! For particles in the depth range 0 - 0.5m allocate uppermost z-level.
+         IF (tmpk >= KM+1) THEN
+            tmpk=KM
+
+            ! Place particle at the center of the uppermost grid box.
+            IF (l_nosurface) THEN
+               tmpZ = DBLE(KM) - 0.5d0
+            ! Place particle exactly at the sea surface.
+            ELSE
+               tmpZ = DBLE(KM)
+            END IF
+
+         END IF
+
+         ! Update return vertical position
+         z1 = tmpZ
+         kb = tmpk
+
+         ! ----------------------------------
+         ! Print z-level of particle.
+         ! PRINT *,'* z-level = ', zd
+         ! PRINT *,'* z1 = ', z1
+         ! PRINT *,'* kb = ', kb
+         ! ----------------------------------
+
+      END IF
+
+    END SUBROUTINE mlreshuffle
+
+
     SUBROUTINE diffuse(x1,y1,z1,ib,jb,kb,dt)
     ! --------------------------------------------------
     !
