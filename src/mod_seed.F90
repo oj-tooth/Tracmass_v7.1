@@ -272,7 +272,11 @@ MODULE mod_seed
             IF (nqua == 1) THEN
                 ntracmax = nsdMax*nsdTim*INT(partQuant)
             ELSE
+<<<<<<< HEAD
                 ! Allocate trajectories using nsdtraj trajectories per seed cell.
+=======
+                ! Allocate trajectories using max trajectories per seed cell.
+>>>>>>> 838ef8c (Added nsdtraj and runpart variables for multfile writing and array allocation)
                 ntracmax = nsdMax*nsdTim*nsdtraj
             END IF
 
@@ -283,6 +287,7 @@ MODULE mod_seed
             trajectories(:)%tt = 0.
             trajectories(:)%t0 = 0.
             trajectories(:)%subvol = 0.
+            trajectories(:)%runpart = 0
             trajectories(:)%ib = 0
             trajectories(:)%jb = 0
             trajectories(:)%kb = 0
@@ -556,6 +561,7 @@ MODULE mod_seed
                         trajectories(ntrac)%z1 = z1
                         trajectories(ntrac)%tt = tt
                         trajectories(ntrac)%subvol = subvol
+                        trajectories(ntrac)%runpart = itim
                         trajectories(ntrac)%t0 = tt
 
                         trajectories(ntrac)%ib = ib
