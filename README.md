@@ -1,4 +1,4 @@
-TRACMASS v2022.01
+TRACMASS v7.1 (2024)
 =====================
 [![GitHubAction](https://github.com/AitorAldama/Tracmass/workflows/Build%20and%20Test/badge.svg)](https://github.com/AitorAldama/Tracmass/workflows/Build%20and%20Test/badge.svg)  [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4337926.svg)](https://doi.org/10.5281/zenodo.4337926)
 
@@ -11,6 +11,20 @@ The code is written in FORTRAN 90 with modules and runs on UNIX platforms such a
 **TRACMASS** has been set up to run with velocities integrated with models such as NEMO or IFS-ECMWF, of satellite datasets such as AVISO.
 
 For more information check our website: **https://www.tracmass.org/**.
+
+Updates
+=======
+
+Several major updates have been included in TRACMASS v7.1:
+
+- Stochastic parameterisation of vertical convective mixing in the surface mixed layer.
+- Specify a subdomain using a 2-dimensional mask stored in a netCDF file.
+- Write Lagrangian trajectories initialised at different time-steps to seperate _run.csv files during trajectory evaluation.
+
+Minor updates include:
+
+- Adding existing named parametes to example namelists (e.g. l_compress to allow compression of large .csv files).
+- Reverting array allocation during seeding to previous TRACMASS version to avoid unnecessary memory usage.
 
 Documentation
 =============
