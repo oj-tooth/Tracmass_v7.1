@@ -47,6 +47,7 @@ MODULE mod_param
   INTEGER                                   :: write_frec         ! Writing frecuency
   INTEGER                                   :: write_form = 0     ! Writing format
 
+  LOGICAL                                   :: l_multifile = .FALSE. ! Write to multiple _run.csv files
   LOGICAL                                   :: l_compress = .FALSE. ! Activate compression
   INTEGER                                   :: icompresspart = 0   ! Compress part integer
 
@@ -102,10 +103,12 @@ MODULE mod_trajdef
    TYPE trajectory
       INTEGER                               :: ia,ja,ka,ib,jb,kb  !! grid indices
       INTEGER                               :: nts                !! time step
+      INTEGER                               :: nsdtraj            !! number of trajectories per seed cell
       INTEGER                               :: niter              !! trajectory iterations
       INTEGER                               :: icycle             !! 0=keep advecting particle
                                                                   !! 1=stop and update model fields
       INTEGER                               :: lbas               !! boundary flag
+      INTEGER                               :: runpart            !! run file part
 
       REAL(DP)                              :: x0,y0,z0,x1,y1,z1  !! positions
       REAL(DP)                              :: tt,t0              !! time
