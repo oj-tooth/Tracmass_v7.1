@@ -42,6 +42,7 @@ MODULE mod_write
     USE mod_tracervars
     USE mod_postprocessvars
     USE mod_divvars
+    USE mod_seedvars
 
     IMPLICIT NONE
 
@@ -60,6 +61,7 @@ MODULE mod_write
     INTEGER               :: ll
     INTEGER               :: lbas
     INTEGER               :: ilvar, itrac, izone, imeri, iklzone
+    INTEGER               :: runpart, nsdMax
 
     LOGICAL               :: fileexists
 
@@ -91,6 +93,28 @@ MODULE mod_write
           OPEN(UNIT=52, FILE = TRIM(fullWritePref)//'_out.csv', STATUS='replace')
           OPEN(UNIT=53, FILE = TRIM(fullWritePref)//'_err.csv', STATUS='replace')
           OPEN(UNIT=54, FILE = TRIM(fullWritePref)//'_rerun.csv', STATUS='replace')
+
+          ! Opening multiple _run.csv files:
+          IF (l_multifile) THEN
+              ! Define number of seeding steps:
+              nsdMax = (tst2 - tst1) + 1
+
+              OpenRunFileLoop: DO runpart=1, nsdMax
+
+                ! Define part of runfile from seeding step:
+                IF (runpart<10) THEN
+                  WRITE(partpath,'(A2,I1)') '00',runpart
+                ELSEIF (runpart<100) THEN
+                  WRITE(partpath,'(A1,I2)') '0',runpart
+                ELSE
+                  WRITE(partpath,'(I3)') runpart
+                END IF
+
+                ! Open a new run.csv file per seeding step:
+                OPEN(UNIT=55+runpart, FILE = TRIM(fullWritePref)//'_run_'//TRIM(partpath)//'.csv', STATUS='replace')
+
+              END DO OpenRunFileLoop
+          END IF
 
       END SUBROUTINE open_outfiles
 
@@ -255,11 +279,20 @@ MODULE mod_write
 
                       IF (l_tracers) THEN
                           CALL writeformat(timeformat)
-                          WRITE(51,FMT=TRIM(outformat))  ntrac, xw, yw, zw, subvol/trunit, tout, boxface, &
+                          IF (l_multifile) THEN
+                              WRITE(55+trajectories(ntrac)%runpart,FMT=TRIM(outformat))  ntrac, xw, yw, zw, subvol/trunit, tout, boxface, &
                               trajectories(ntrac)%tracerval
+                          ELSE
+                              WRITE(51,FMT=TRIM(outformat))  ntrac, xw, yw, zw, subvol/trunit, tout, boxface, &
+                              trajectories(ntrac)%tracerval
+                          END IF
                       ELSE
                           CALL writeformat(timeformat)
-                          WRITE(51,FMT=TRIM(outformat))  ntrac, xw, yw, zw, subvol/trunit, tout, boxface
+                          IF (l_multifile) THEN
+                              WRITE(55+trajectories(ntrac)%runpart,FMT=TRIM(outformat))  ntrac, xw, yw, zw, subvol/trunit, tout, boxface
+                          ELSE
+                              WRITE(51,FMT=TRIM(outformat))  ntrac, xw, yw, zw, subvol/trunit, tout, boxface
+                          END IF
                       END IF
 
                       CASE(1)
@@ -268,13 +301,22 @@ MODULE mod_write
                       IF (write_frec == 1) tout = nff*(ts-dts)
 
                       IF (l_tracers) THEN
-                          CALL writeformat(timeformat)
-                          WRITE(51,FMT=TRIM(outformat))  ntrac, xw, yw, zw, subvol/trunit, tout, boxface, &
-                              trajectories(ntrac)%tracerval
-                      ELSE
-                          CALL writeformat(timeformat)
-                          WRITE(51,FMT=TRIM(outformat))  ntrac, xw, yw, zw, subvol/trunit, tout, boxface
-                      END IF
+                        CALL writeformat(timeformat)
+                        IF (l_multifile) THEN
+                            WRITE(55+trajectories(ntrac)%runpart,FMT=TRIM(outformat))  ntrac, xw, yw, zw, subvol/trunit, tout, boxface, &
+                            trajectories(ntrac)%tracerval
+                        ELSE
+                            WRITE(51,FMT=TRIM(outformat))  ntrac, xw, yw, zw, subvol/trunit, tout, boxface, &
+                            trajectories(ntrac)%tracerval
+                        END IF
+                    ELSE
+                        CALL writeformat(timeformat)
+                        IF (l_multifile) THEN
+                            WRITE(55+trajectories(ntrac)%runpart,FMT=TRIM(outformat))  ntrac, xw, yw, zw, subvol/trunit, tout, boxface
+                        ELSE
+                            WRITE(51,FMT=TRIM(outformat))  ntrac, xw, yw, zw, subvol/trunit, tout, boxface
+                        END IF
+                    END IF
 
                       CASE(2)
                       ! Include time - YYYY MM DD HH MM SS
@@ -286,13 +328,24 @@ MODULE mod_write
 
                       IF (l_tracers) THEN
                           CALL writeformat(timeformat)
-                          WRITE(51,FMT=TRIM(outformat))  ntrac, xw, yw, zw, &
+                          IF (l_multifile) THEN
+                              WRITE(55+trajectories(ntrac)%runpart,FMT=TRIM(outformat))  ntrac, xw, yw, zw, &
                               subvol/trunit, dateYear, dateMon, dateDay, dateHour, boxface, &
-                                trajectories(ntrac)%tracerval
+                              trajectories(ntrac)%tracerval
+                          ELSE
+                              WRITE(51,FMT=TRIM(outformat))  ntrac, xw, yw, zw, &
+                              subvol/trunit, dateYear, dateMon, dateDay, dateHour, boxface, &
+                              trajectories(ntrac)%tracerval
+                          END IF
                       ELSE
                           CALL writeformat(timeformat)
-                          WRITE(51,FMT=TRIM(outformat))  ntrac, xw, yw, zw, &
+                          IF (l_multifile) THEN
+                              WRITE(55+trajectories(ntrac)%runpart,FMT=TRIM(outformat))  ntrac, xw, yw, zw, &
                               subvol/trunit, dateYear, dateMon, dateDay, dateHour, boxface
+                          ELSE
+                              WRITE(51,FMT=TRIM(outformat))  ntrac, xw, yw, zw, &
+                              subvol/trunit, dateYear, dateMon, dateDay, dateHour, boxface
+                          END IF
                       END IF
 
                   END SELECT
