@@ -19,12 +19,12 @@ Several major updates have been included in TRACMASS v7.1:
 
 - Stochastic parameterisation of vertical convective mixing in the surface mixed layer.
 - Specify a subdomain using a 2-dimensional mask stored in a netCDF file.
-- Write Lagrangian trajectories initialised at different time-steps to seperate _run.csv files during trajectory evaluation.
+- Specify the maximum number of Lagrangian trajectores allocated per seed cell prior to seeding (nsdtraj) to improve memory efficiency.
+- Use l_multifile option to write Lagrangian trajectories to seperate _run.csv according to seeding step.
 
 Minor updates include:
 
-- Adding existing named parametes to example namelists (e.g. l_compress to allow compression of large .csv files).
-- Reverting array allocation during seeding to previous TRACMASS version to avoid unnecessary memory usage.
+- Adding existing named parametes to example namelists (e.g. l_compress option to allow compression of large .csv files).
 
 Documentation
 =============
