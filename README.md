@@ -27,6 +27,20 @@ Minor updates include:
 - Adding existing named parameters to example namelists (e.g. l_compress option to allow compression of large .csv files).
 - New example project for the CMIP6 HadGEM3-GC31-MM simulation where monthly mean output variables are stored in separate netCDF files.
 
+Updates
+=======
+
+Several major updates have been included in TRACMASS v7.1:
+
+- Stochastic parameterisation of vertical convective mixing in the surface mixed layer.
+- Specify a subdomain using a 2-dimensional mask stored in a netCDF file.
+- Write Lagrangian trajectories initialised at different time-steps to seperate _run.csv files during trajectory evaluation.
+
+Minor updates include:
+
+- Adding existing named parametes to example namelists (e.g. l_compress to allow compression of large .csv files).
+- Reverting array allocation during seeding to previous TRACMASS version to avoid unnecessary memory usage.
+
 Documentation
 =============
 
