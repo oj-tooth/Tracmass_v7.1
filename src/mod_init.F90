@@ -47,8 +47,8 @@ MODULE mod_init
           namelist /INIT_GRID_SIZE/        imt, jmt, km, iperio, jperio, &
                                            topoDataDir, &
                                            hgridFile, dy_name, dyu_name, dx_name, dxv_name, &
-                                           zgridFile, dzt_name, dzu_name, dzv_name, depth_name,&
-                                           bathyFile, kmt_name &
+                                           zgridFile, dzt_name, dzu_name, dzv_name, depth_name, &
+                                           bathyFile, kmt_name
           namelist /INIT_GRID_SUBDOMAIN/   l_subdom, imindom, imaxdom, jmindom, jmaxdom
           namelist /INIT_GRID_TIME/        ngcm_step, ngcm_unit, iter
           namelist /INIT_START_DATE/       startSec, startMin, startHour,           &
@@ -56,7 +56,7 @@ MODULE mod_init
                                            noleap, mon30day
           namelist /INIT_RUN_TIME/         loopYears, loopStartYear, loopEndYear, &
                                            log_level, intrun
-          namelist /INIT_WRITE_TRAJ/       write_frec, write_form, outDataDir, outDataFile, timeformat, l_compress
+          namelist /INIT_WRITE_TRAJ/       write_frec, write_form, outDataDir, outDataFile, timeformat, l_compress, l_multifile
           namelist /INIT_SEEDING/          nff, isec, idir, nqua, partQuant, nsdtraj, &
                                            loneparticle, SeedType, ist1,  &
                                            ist2, jst1, jst2, kst1, kst2, tst1, tst2, &
