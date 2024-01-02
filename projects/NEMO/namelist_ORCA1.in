@@ -126,7 +126,7 @@
      							! = 3 Each particle reflects air/water mass/volume at seeding.
      							!     set by partQuant in m3 or kg per particle
 
-      nsdtraj        = 10,         ! number of trajectories to allocate per seeding cell (used for allocation if nqua > 1)
+      nsdtraj        = 10,         ! max number of trajectories expected to seed per seeding cell - used for array allocation
       partquant      = 1,          ! particles/gridcell or m3s-1/particle or m3/particle
       loneparticle   = 0, 	     ! start only one trajectory for debugging
       seedtype       = 1,	     ! = 1 seed using ist,jst,kst (below)
