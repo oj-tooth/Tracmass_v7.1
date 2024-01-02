@@ -149,9 +149,16 @@ MODULE mod_tracers
               tu = tracers(itrac)%data(ib,jb,kbtracer,nsm)
               tm = tracers(itrac)%data(ib,jb,kbtracer,nsp)
           ! The trajectory crosses a wall
-          ELSE
-              tu  = 0.5*(tracers(itrac)%data(ib,jb,kbtracer,nsm) + tracers(itrac)%data(ia,ja,katracer,nsm))
-              tm  = 0.5*(tracers(itrac)%data(ib,jb,kbtracer,nsp) + tracers(itrac)%data(ia,ja,katracer,nsp))
+            ELSE
+              ! For the killzone mask case:
+              IF (tracers(itrac)%varname == 'mask') THEN
+                  tu = 0.5*(tracers(itrac)%data(ib,jb,kbtracer,1) + tracers(itrac)%data(ia,ja,katracer,1))
+                  tm = 0.5*(tracers(itrac)%data(ib,jb,kbtracer,1) + tracers(itrac)%data(ia,ja,katracer,1))
+              ! For all other crossing cases:
+              ELSE
+                  tu  = 0.5*(tracers(itrac)%data(ib,jb,kbtracer,nsm) + tracers(itrac)%data(ia,ja,katracer,nsm))
+                  tm  = 0.5*(tracers(itrac)%data(ib,jb,kbtracer,nsp) + tracers(itrac)%data(ia,ja,katracer,nsp))
+              END IF
           END IF
 
           tracervalue(itrac) = (intrpg*tm + intrpr*tu)
