@@ -80,7 +80,6 @@ MODULE mod_seedvars
   INTEGER                                    :: loneparticle ! ntrac of the lone particle
 
   REAL(DP)                                   :: partQuant    ! number of particles per grid to seed
-
   INTEGER                                    :: nsdtraj      ! number of trajectories per seed cell
   INTEGER                                    :: ist1, ist2   ! Zonal seeding region
   INTEGER                                    :: jst1, jst2   ! Meridional seeding region
@@ -103,7 +102,7 @@ MODULE mod_trajdef
    TYPE trajectory
       INTEGER                               :: ia,ja,ka,ib,jb,kb  !! grid indices
       INTEGER                               :: nts                !! time step
-      INTEGER                               :: nsdtraj            !! number of trajectories per seed cell
+
       INTEGER                               :: niter              !! trajectory iterations
       INTEGER                               :: icycle             !! 0=keep advecting particle
                                                                   !! 1=stop and update model fields
@@ -380,10 +379,11 @@ MODULE mod_tracervars
   INTEGER, DIMENSION(10)              :: tracerchoice = 999, maxormin = 1
 
   ! Tracer characteristics
-  CHARACTER(len=100), DIMENSION(10)   :: tracername = '', tracerunit, &
-                                         tracervarname, traceraction, killzoneFile
+  CHARACTER(LEN=200)                  :: killzoneFile
+  CHARACTER(LEN=100), DIMENSION(10)   :: tracername = '', tracerunit, &
+                                         tracervarname, traceraction
 
-  CHARACTER(len=2), DIMENSION(10)     :: tracerdimension = '3D'
+  CHARACTER(LEN=2), DIMENSION(10)     :: tracerdimension = '3D'
 
   REAL(DP), DIMENSION(10)             :: tracermin, tracermax, &
                                          tracer0min=-9999.d0, tracer0max=9999.d0, &
