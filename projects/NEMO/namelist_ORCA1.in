@@ -164,26 +164,26 @@
       l_tracers = .TRUE.               ! Should we evaluate tracers along the trajectories?
 
       ! Define killzone file name stored in physDataDir
-      ! with killzone mask variable named 'killzone'
+      ! with killzone mask variable named 'mask'
       killzoneFile = 'killzone.nc'
 
       ! Tracer name (description)
-      tracername = 'To','S','sigma0'
+      tracername = 'temp','sal','sigma0','mld',
       ! Tracer unit (description)
-      tracerunit = 'degC','PSU','kg/m3'
+      tracerunit = 'degC','PSU','kg/m3','m',
 
       ! Name of the variable in the netcdf (if it's read)
-      tracervarname = 'votemper','vosaline',''
+      tracervarname = 'votemper','vosaline','','somxl010',
 
       ! Action (read or compute)
-      traceraction = 'read','read','compute'
+      traceraction = 'read','read','compute','read',
 
       ! Minimum and maximum value of the binning
-      tracermin = -3, 32, 20
-      tracermax = 33, 38, 30
+      tracermin = -3, 32, 20, 0,
+      tracermax = 33, 38, 30, 5000,
 
       ! Dimension of the tracer
-      tracerdimension = 3D, 3D, 3D
+      tracerdimension = 3D, 3D, 3D, 2D,
 /
 
 &INIT_TRACERS_SEEDING
@@ -212,19 +212,18 @@
       jens           =  95, 215,         ! south indices of killzones
       jenn           =  95, 215,         ! north indices of killzones
 
-      ! If exitType = 2: killing zone defined by tracer value
+      ! If exitType = 2: killzone defined by tracer value
       ! Tracerchoice defines which tracer is used for the killing zone
-      ! it could be different
       !tracerchoice = 1, 2
       !tracere      = 25, 35
       !maxormin     =  1, -1
       ! This set up defines a killing zone by the 25C isotherm (maximum)
       ! and the 35psu isohaline (minimum)
 
-      ! If exitType = 2 & 'killzone' tracer active: killing zone defined by 
+      ! If exitType = 2 & killzone tracer active: killing zone defined by 
       ! user defined mask read as tracer along particle trajectories.
       ! 2D mask should define cells in domain = 1 and outside = 0.
-      ! Tracerchoice should be defined as 'killzone' tracer variable
+      ! Tracerchoice should be defined as 'mask' tracer variable
       ! tracerchoice = 3,
       ! tracere      = 0.5,
       ! maxormin     =  1,
