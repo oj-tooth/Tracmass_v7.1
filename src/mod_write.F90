@@ -280,8 +280,8 @@ MODULE mod_write
                       IF (l_tracers) THEN
                           CALL writeformat(timeformat)
                           IF (l_multifile) THEN
-                              WRITE(55+trajectories(ntrac)%runpart,FMT=TRIM(outformat))  ntrac, xw, yw, zw, subvol/trunit, tout, boxface, &
-                              trajectories(ntrac)%tracerval
+                              WRITE(55+trajectories(ntrac)%runpart,FMT=TRIM(outformat))  ntrac, xw, yw, zw, subvol/trunit, tout, & 
+                              boxface, trajectories(ntrac)%tracerval
                           ELSE
                               WRITE(51,FMT=TRIM(outformat))  ntrac, xw, yw, zw, subvol/trunit, tout, boxface, &
                               trajectories(ntrac)%tracerval
@@ -289,7 +289,8 @@ MODULE mod_write
                       ELSE
                           CALL writeformat(timeformat)
                           IF (l_multifile) THEN
-                              WRITE(55+trajectories(ntrac)%runpart,FMT=TRIM(outformat))  ntrac, xw, yw, zw, subvol/trunit, tout, boxface
+                              WRITE(55+trajectories(ntrac)%runpart,FMT=TRIM(outformat))  ntrac, xw, yw, zw, subvol/trunit, &
+                              tout, boxface
                           ELSE
                               WRITE(51,FMT=TRIM(outformat))  ntrac, xw, yw, zw, subvol/trunit, tout, boxface
                           END IF
@@ -303,16 +304,17 @@ MODULE mod_write
                       IF (l_tracers) THEN
                         CALL writeformat(timeformat)
                         IF (l_multifile) THEN
-                            WRITE(55+trajectories(ntrac)%runpart,FMT=TRIM(outformat))  ntrac, xw, yw, zw, subvol/trunit, tout, boxface, &
-                            trajectories(ntrac)%tracerval
+                            WRITE(55+trajectories(ntrac)%runpart,FMT=TRIM(outformat))  ntrac, xw, yw, zw, subvol/trunit, tout, &
+                            boxface, trajectories(ntrac)%tracerval
                         ELSE
-                            WRITE(51,FMT=TRIM(outformat))  ntrac, xw, yw, zw, subvol/trunit, tout, boxface, &
-                            trajectories(ntrac)%tracerval
+                            WRITE(51,FMT=TRIM(outformat))  ntrac, xw, yw, zw, subvol/trunit, tout, &
+                            boxface, trajectories(ntrac)%tracerval
                         END IF
                     ELSE
                         CALL writeformat(timeformat)
                         IF (l_multifile) THEN
-                            WRITE(55+trajectories(ntrac)%runpart,FMT=TRIM(outformat))  ntrac, xw, yw, zw, subvol/trunit, tout, boxface
+                            WRITE(55+trajectories(ntrac)%runpart,FMT=TRIM(outformat))  ntrac, xw, yw, zw, subvol/trunit, tout, &
+                            boxface
                         ELSE
                             WRITE(51,FMT=TRIM(outformat))  ntrac, xw, yw, zw, subvol/trunit, tout, boxface
                         END IF
