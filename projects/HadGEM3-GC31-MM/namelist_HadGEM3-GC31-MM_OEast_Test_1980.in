@@ -1,0 +1,246 @@
+&INIT_GRID_DESCRIPTION
+        ! Direction of the grid (1 - E->W, S->N, B->U)
+        griddir = 1,1,-1
+
+        ! Does the netcdf data start with a zero index?
+        zeroindx = .TRUE.
+
+        ! Describe filenames
+        physDataDir    = '/home/snapdragon/HadGEM3-GC31-MM/Proj_Future_Pathways/data/fields/means/',                   ! directory of physical data (u,v,T,S,MLD,etc)
+        physPrefixForm = 'HadGEM3-GC31-MM_r1i1p1f3_',
+        dateformat     = 'YYYY'
+        tGridName      = 'T',                           ! name of Tgrid, e.g. grid_T
+        uGridName      = 'U',                           ! name of Ugrid
+        vGridName      = 'V',                           ! name of Vgrid                                 ! suffix of files, e.g. ".nc"
+
+        fileSuffix     = '.nc',
+
+        ! Describe variable names
+        hs_name        = 'zos'                     ! Sea surface height
+        ueul_name      = 'uo',                     ! name of resolved zonal velocity
+        veul_name      = 'vo',                     ! ---- " -------   meridional
+        usgs_name      = '',                       ! name of eddy induced zonal velocity
+        vsgs_name      = '',                       ! ---- " -------   meridional
+/
+
+&INIT_GRID_SIZE
+     	! Size of global grid
+     	imt            = 341,                             ! number of global i points
+     	jmt            = 270,                             ! number of global j points
+     	km             = 75,                              ! number of global k points
+
+      iperio  = 0                                       ! zonal periodic
+      jperio  = 0                                       ! meridional boundary conditions
+
+      topoDataDir    = '/home/snapdragon/HadGEM3-GC31-MM/Proj_Future_Pathways/data/domain/',       ! directory of grid data
+
+      hgridFile      = 'mesh_mask_eORCA025-GO6_subdomain.nc'                    ! file with dx, dy etc
+      dy_name        = 'e2t'                            ! name of dy at T point
+      dyu_name       = 'e2u'                            !         dy at U point
+      dx_name        = 'e1t'                            ! name of dx at T point
+      dxv_name       = 'e1v'                            !         dx at V point
+
+      zgridFile   = 'mesh_mask_eORCA025-GO6_subdomain.nc'   ! file with dz etc.
+      dzt_name    = 'e3t_0'                                 ! name of 3D dz at T point
+      dzu_name    = 'e3u_0'                                 ! --- " ---  dz at U point
+      dzv_name    = 'e3v_0'                                 ! --- " ---  dz at V point
+      depth_name  = 'nav_lev'                               ! --- " ---- depth (m) at T point.
+
+      bathyFile      = 'mesh_mask_eORCA025-GO6_subdomain.nc',        ! file with bathymetry in model levels
+      kmt_name       = 'mbathy',                                     ! name of bathymetry in model levels
+
+/
+
+&INIT_GRID_SUBDOMAIN
+     l_subdom    = .TRUE.,                            ! Initialise subdomain
+     imindom     = 8,                                 ! Eastern and western wall for subdomain
+     imaxdom     = 336,
+     jmindom     = 11,                                ! Southern and northern wall for subdomain
+     jmaxdom     = 260,
+/
+
+&INIT_GRID_TIME
+     ngcm_step      = 1,                                ! time between two time levels
+                                                        ! if ncgcm_unit = 5, then ngcm_step = 3 means 3 months
+     ngcm_unit      = 5,                                ! units of ngcm
+                                                        !
+     iter           = 100,                              ! number of subcycles between time levels                                                             ! stopped
+/
+
+&INIT_START_DATE
+     startsec       = 0,                                ! start time
+     startmin       = 0,
+     starthour      = 0,
+     startday       = 16,                               ! start date
+     startmon       = 01,
+     startyear      = 1980,
+     noleap         = .TRUE.,                           ! don't use leap years?
+     mon30day       = .FALSE.,
+/
+
+&INIT_RUN_TIME
+     ! Loop run
+     loopYears      = .FALSE.,		     ! make a time loop to run
+     		      			           ! e.g. 1000 years using only 100 years of data
+     loopStartYear  = ,				     ! year to start loop from
+     loopEndYear    = ,				     ! last year of loop
+
+     ! Verbose
+     log_level    = 0
+
+     ! Information of run time
+     intrun         = 350             ! number of time steps for run
+/
+
+&INIT_WRITE_TRAJ
+     write_frec    = 1     ! 1 = write at time intervals of gcm datasets (each ints)
+                           ! 2 = write at each time iteration
+                           ! 3 = write each spatial grid-crossing
+                           ! 4 = write all the time steps
+                           ! 5 = write only start and end positions
+
+
+     outDataDir    = '/home/snapdragon/HadGEM3-GC31-MM/Tracmass_v7.1/Tracmass_v7.1/data/',
+     outDataFile   = 'HadGEM3-GC31-MM_OEast_FinT_1980',
+
+     timeformat    = 0     ! Format of the time array
+                           ! 0 - tt / 1 - ts / 2 - YYYY, MM, DD, HH
+
+     l_compress = .FALSE., ! Compress _run.csv files on exceeding 2GB filesize using gzip
+
+     l_multifile = .TRUE. ! Write trajectories to seperate _run.csv files according to seeding step
+/
+
+&INIT_SEEDING
+      nff            = 1,           ! = 1 run forward trajectories
+          		      					     ! = -1 run backwards
+      isec           = ,				   ! = 1 start on zonal cell wall
+          		      					     ! = 2 start on meridional cell wall
+     							                 ! = 3 start on vertical wall
+      idir           = , 				 ! = 1 start only when flux > 0
+          		      					     ! = -1      only when flux < 0
+     	nqua           = 2,					 ! number of trajectories can be set by
+     														   ! = 1 constant number of particles in all seeding cells
+     														   !     set by partQuant (particles / gridcell)
+     														   ! = 2 Each particle reflects mass transport at seeding.
+     														   !     set by partQuant (m3/s or kg/s per particle)
+     														   ! = 3 Each particle reflects air/water mass/volume at seeding.
+     														   !     set by partQuant in m3 or kg per particle
+      nsdtraj        = 10,                       ! max number of trajectories expected to seed per seeding cell - used for array allocation
+      partquant      = 5000,                     ! particles/gridcell or m3s-1/particle or m3/particle
+      loneparticle   = 0,				 ! start only one trajectory for debugging
+      seedtype       = 2,		             ! = 1 seed using ist,jst,kst (below)
+          		      					     ! = 2 seed using file with start positions
+
+     	! when seedtype = 2
+      ist1           = , 				    ! seed in box in range i = [ist1,ist2]
+      ist2           = , 				    ! 	       	      	    j = [jst1,jst2]
+      jst1           = , 				    ! 			                k = [kst1,kst2]
+      jst2           = ,
+      kst1           = ,
+      kst2           = ,
+      ! when seedtype = 2
+      seeddir        = '/home/snapdragon/HadGEM3-GC31-MM/Proj_Future_Pathways/data/seeding/',	     ! directory for seed files
+      seedfile       = 'HadGEM3-GC31-MM_OSNAP_East_Inflow_seedFile.csv',				     ! name of seed file
+
+
+
+      seedtime       =  1,				     ! = 1 seed only for specific times
+                                                     ! = 2 seed using file with start positions
+
+      ! when seedtime = 1
+      tst1           = 1,				       ! seed only between tst1 and tst2
+      tst2           = 12,
+
+      ! when seedtime = 2
+      timefile       = '',             ! name of seed file
+/
+
+&INIT_TRACERS
+      l_tracers = .TRUE.               ! Should we evaluate tracers along the trajectories?
+
+      ! Define killzone file name stored in physDataDir
+      ! with killzone mask variable named 'mask'
+      killzoneFile = 'HadGEM3-GC31-MM_OSNAP_GSR_killzone_mask.nc',
+
+      ! Tracer name (description)
+      tracername = 'thetao','so','killzonemask'
+      ! Tracer unit (description)
+      tracerunit = 'degC','gkg-1','None'
+
+      ! Name of the variable in the netcdf (if it's read)
+      tracervarname = 'thetao','so','mask'
+
+      ! Action (read or compute)
+      traceraction = 'read','read','read'
+
+      ! Minimum and maximum value of the binning
+      tracermin = -3, 32, -1
+      tracermax = 33, 38, 1
+
+      ! Dimension of the tracer
+      tracerdimension = 3D, 3D, 2D
+/
+
+&INIT_TRACERS_SEEDING
+      ! minimum and maximum value for seeding
+      ! same order as in tracername
+      !tracer0min = 2, 34.9,
+      !tracer0max = 4, 35.0,
+/
+
+&INIT_KILLZONES
+      timax = 1825 ! time limit for traj [days]
+
+      exitType = 2
+      ! If exitType = 1: killing zone defined by a box
+      ! IMPORTANT -> The maximum number of boxes than can be defined are 10
+      ! ienw,iene are western and eastern i indices of killzone
+      ! jens,jenn are southern and northern j indices of killzone
+      ! ienw = 55,    ! west indices of killzones
+      ! iene = 322,	  ! east indices of killzones
+      ! jens = 138,   ! south indices of killzones
+      ! jenn = 138,   ! north indices of killzones
+      ! sets up two killzones, the first i = [0,100], j = [200,300]
+      ! the other i = [500,1000], j = [450,470]
+      ienw = ,    ! west indices of killzones
+      iene = ,    ! east indices of killzones
+      jens = ,    ! south indices of killzones
+      jenn = ,    ! north indices of killzones
+
+      ! If exitType = 2: killing zone defined by tracer value
+      ! Tracerchoice defines which tracer is used for the killing zone
+      ! it could be different
+      !tracerchoice = 1, 2
+      !tracere      = 25, 35
+      !maxormin     =  1, -1
+      ! This set up defines a killing zone by the 25C isotherm (maximum)
+      ! and the 35psu isohaline (minimum)
+
+      ! If exitType = 2 & 'killzone' tracer active: killing zone defined by 
+      ! user defined mask read as tracer along particle trajectories.
+      ! 2D mask should define cells in domain = 1 and outside = 0.
+      ! Tracerchoice should be defined as 'killzone' tracer variable
+      tracerchoice = 3,
+      tracere      = 0.5,
+      maxormin     =  -1,
+      ! This set up defines a killing zone using the killzone mask
+      ! such that particles are terminated on crossing a cell wall
+      ! where at least one of the two cells T-points is 0 
+      ! (outside of domain) otherwise particles continue to 
+      ! be advected.
+
+/
+
+&INIT_POSTPROCESS
+      l_psi      = .FALSE.          ! Compute stream Functions
+      dirpsi     = -1,-1,-1,-1,-1  ! Direction of integration
+/
+
+&INIT_ACTIVE
+      l_diffusion = .FALSE.         ! Apply Stochastic diffusion along particle trajectories
+      Ah = 0                        ! Horizontal diffusivity coefficient
+      Av = 0                        ! Vertical diffusivity coefficient
+      l_mlreshuffle = .FALSE.       ! Apply Mixed Layer Reshuffle - particle vertical displacement in ML - from Paris et al. 2013
+      ml_wmax = 0.1                 ! Maximum vertical velocity of convective mixing (m/s)
+/
