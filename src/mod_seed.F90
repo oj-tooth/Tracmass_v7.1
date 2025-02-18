@@ -409,8 +409,9 @@ MODULE mod_seed
                       END IF
 
                   CASE (3) ! particle reflects air/water mass/volume at seeding
-                      vol = dzt(ib,jb,kb,1)
-                      num = INT(vol/partQuant)
+                      ! Modification [04/02/2025] - seed water parcels as volume [m3].
+                      vol = dxdy(ib,jb) * dzt(ib,jb,kb,nsm) * zstot(ib,jb,-1)
+                      num = INT(partQuant)
                   END SELECT
 
                   IF (num == 0)  num = 1
@@ -513,10 +514,11 @@ MODULE mod_seed
                                 ELSE IF (isec == 3) THEN      ! Horizontal wall
 
                                       IF (ikst == KM) THEN
-                                          tracervalue(itrac) = tracers(itrac)%data(ib,jb,ikst,nsm)
+                                          ! Modification [07-02-2025]: Corrected k-index to use ktracer as above.
+                                          tracervalue(itrac) = tracers(itrac)%data(ib,jb,ktracer,nsm)
                                       ELSE
-                                          tracervalue(itrac) = 0.5*tracers(itrac)%data(ib,jb,ikst,nsm) &
-                                                             + 0.5*tracers(itrac)%data(ib,jb,ikst+1,nsm)
+                                          ! Modification [07-02-2025]: Corrected k-index to use ktracer as above & apply to 2-D field (i.e., remove k-dependency).
+                                          tracervalue(itrac) = tracers(itrac)%data(ib,jb,ktracer,nsm)
                                       END IF
 
                                 END IF
