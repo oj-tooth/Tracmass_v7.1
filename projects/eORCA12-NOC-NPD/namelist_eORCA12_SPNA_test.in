@@ -35,7 +35,7 @@
       iperio  = 1                                       ! zonal periodic
       jperio  = 1                                       ! meridional boundary conditions
 
-      topoDataDir    = '/gws/nopw/j04/atlantis/otooth/NPD/eORCA12',  ! directory of grid data
+      topoDataDir    = '/gws/nopw/j04/atlantis/otooth/NPD/eORCA12/',  ! directory of grid data
 
       hgridFile      = 'eORCA12_mesh_mask.nc'             ! file with dx, dy etc
       dy_name        = 'e2t'                              ! name of dy at T point
@@ -76,7 +76,7 @@
      starthour      = 0,
      startday       = 1,                                ! start date
      startmon       = 1,
-     startyear      = 2014,
+     startyear      = 2021,
      noleap         = .TRUE.,                           ! don't use leap years?
      mon30day       = .FALSE.
 /
