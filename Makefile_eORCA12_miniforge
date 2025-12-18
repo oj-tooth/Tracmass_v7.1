@@ -3,8 +3,8 @@
 #================================================================
 
 # Project and case definition
-PROJECT	          = eORCA12_UKESM
-CASE              = eORCA12_2000_north_test
+PROJECT	          = eORCA12-NOC-NPD
+CASE              = eORCA12_SPNA_test
 RUNFILE 	      = runtracmass
 ARCH              = conda
 NETCDFLIBS        = conda
