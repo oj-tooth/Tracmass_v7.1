@@ -10,7 +10,45 @@ In addition to the updates made to TRACMASS version 7.1, NEMO-MEDUSA experiments
 The additions above are available on the dev_JASMIN branch, which has been added to the TRACMASS_v7.1 repository.
 
 ## Running TRACMASS on JASMIN
-To run a Lagrangian experiment using TRACMASS on JASMIN, we must first load the GNU & netCDF libraries needed to compile the code using jaspy:
+To run a Lagrangian experiment using TRACMASS on JASMIN, we must first load the GNU & netCDF libraries needed to compile the code using either jaspy or conda:
+
+#### **Using Conda:**
+
+The simplest way to get started with **TRACMASS** on any HPC system is to use a conda virtual environment. Note that this virtual environment can also include the Python libraries used for analysis.
+
+To do this:
+
+* Create a new virtual environment using [**miniforge**](https://github.com/conda-forge/miniforge) - a minimal installer for **Conda** and **Mamba**:
+    ```bash
+    conda create -n env_tracmass
+    ```
+
+> **To learn more about miniforge on JASMIN: https://help.jasmin.ac.uk/docs/software-on-jasmin/creating-and-using-miniforge-environments/#activating-the-base-environment**
+
+* Next, install the **gfortran** and **netcdf-fortran** libraries required by **TRACMASS** from the conda-forge open-source package manager.
+    ```bash
+    conda activate env_tracmass
+
+    conda install gfortran netcdf-fortran
+    ```
+
+* Verify **gfortran** and **netCDF** libraries are available.
+    ```bash
+    which gfortran
+
+    nf-config --all
+    ```
+
+* Update the *Makefile* `ARCH` and `NETCDFLIBS` options.
+    ```bash
+    # Project and case definition
+    ...
+    ARCH              = conda
+    NETCDFLIBS        = conda
+    #=============================
+    ```
+
+#### **Using Jaspy:**
 
 ```sh
 # -- Load GNU & netCDF libraries -- #
@@ -34,7 +72,7 @@ Next, compile TRACMASS using the ```make``` command.
 
 Assuming the compilation is successful, we can finally run our experiment using ```./runtracmass```.
 
-### Using LOTUS 2
+### **Submitting TRACMASS Jobs using LOTUS2**
 
 An example slurm job script `submit_tracmass_eORCA12_UKESM.slurm`, which submits a test TRACMASS experiment to the LOTUS2 standard / serial queue, is provided in this directory and below:
 
