@@ -4,3 +4,5 @@ docs/_static
 docs/_templates
 data/*
 
+# Data files
+*.nc
